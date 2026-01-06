@@ -4,11 +4,15 @@ apply plugin: 'maven-publish'
 android {
     compileSdkVersion 33
     buildToolsVersion "28.0.3"
+
     defaultConfig {
         minSdkVersion 18
 
-}
-
+        // ✅ أضف هذا
+        ndk {
+            abiFilters 'armeabi', 'armeabi-v7a'
+        }
+    }
 
     buildTypes {
         release {
@@ -17,15 +21,30 @@ android {
         }
     }
 
-    sourceSets.main {
-        jniLibs.srcDirs = ['libs']
+    // ✅ تأكد من هذا
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    // ✅ أضف هذا لتجنب تعارضات الملفات
+    packagingOptions {
+        pickFirst 'lib/armeabi/libjpeg-turbo1500.so'
+        pickFirst 'lib/armeabi/libusb100.so'
+        pickFirst 'lib/armeabi/libuvc.so'
+        pickFirst 'lib/armeabi/libUVCCamera.so'
+        pickFirst 'lib/armeabi-v7a/libjpeg-turbo1500.so'
+        pickFirst 'lib/armeabi-v7a/libusb100.so'
+        pickFirst 'lib/armeabi-v7a/libuvc.so'
+        pickFirst 'lib/armeabi-v7a/libUVCCamera.so'
     }
 }
 
 dependencies {
-    implementation  fileTree(dir: 'libs', include: ['*.jar'])
-    implementation  'io.reactivex:rxjava:1.1.6'
-    implementation  'io.reactivex:rxandroid:1.2.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'io.reactivex:rxjava:1.1.6'
+    implementation 'io.reactivex:rxandroid:1.2.1'
 }
 
 afterEvaluate {
@@ -35,7 +54,7 @@ afterEvaluate {
                 from components.release
                 groupId = "com.github.Mostafa-khaled21"
                 artifactId = "uvccamerasdk"
-                version = "1.0.4"
+                version = "1.0.6"
             }
         }
     }
