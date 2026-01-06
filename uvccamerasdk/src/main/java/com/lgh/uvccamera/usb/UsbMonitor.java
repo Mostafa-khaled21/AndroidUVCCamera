@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 
 import com.lgh.uvccamera.callback.ConnectCallback;
 import com.lgh.uvccamera.config.CameraConfig;
