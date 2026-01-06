@@ -76,15 +76,30 @@ public class UsbMonitor implements IMonitor {
     @Override
     public void requestPermission(UsbDevice usbDevice) {
         LogUtil.i("requestPermission-->" + usbDevice);
+
         if (mUsbManager.hasPermission(usbDevice)) {
             if (mConnectCallback != null) {
                 mConnectCallback.onGranted(usbDevice, true);
             }
         } else {
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, new Intent(ACTION_USB_DEVICE_PERMISSION), 0);
+
+            int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                flags |= PendingIntent.FLAG_MUTABLE;
+            }
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    mContext,
+                    0,
+                    new Intent(ACTION_USB_DEVICE_PERMISSION),
+                    flags
+            );
+
             mUsbManager.requestPermission(usbDevice, pendingIntent);
         }
     }
+
 
     @Override
     public void connectDevice(UsbDevice usbDevice) {
