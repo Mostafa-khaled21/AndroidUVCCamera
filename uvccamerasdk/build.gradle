@@ -8,45 +8,31 @@ android {
     defaultConfig {
         minSdkVersion 18
 
-        // ✅ أضف هذا
         ndk {
             abiFilters 'armeabi', 'armeabi-v7a'
         }
     }
+
+    // ✅ sourceSets مرة واحدة بس
     sourceSets {
         main {
-            jniLibs.srcDirs = ['src/main/jniLibs']  // الافتراضي
+            jniLibs.srcDirs = ['src/main/jniLibs']
         }
     }
+
+    // ✅ packagingOptions مرة واحدة بس
     packagingOptions {
         jniLibs {
             useLegacyPackaging = false
+            keepDebugSymbols += ['**/*.so']  // ✅ أضف ده
         }
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-
-    // ✅ تأكد من هذا
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
-
-    // ✅ أضف هذا لتجنب تعارضات الملفات
-    packagingOptions {
-        pickFirst 'lib/armeabi/libjpeg-turbo1500.so'
-        pickFirst 'lib/armeabi/libusb100.so'
-        pickFirst 'lib/armeabi/libuvc.so'
-        pickFirst 'lib/armeabi/libUVCCamera.so'
-        pickFirst 'lib/armeabi-v7a/libjpeg-turbo1500.so'
-        pickFirst 'lib/armeabi-v7a/libusb100.so'
-        pickFirst 'lib/armeabi-v7a/libuvc.so'
-        pickFirst 'lib/armeabi-v7a/libUVCCamera.so'
     }
 }
 
@@ -63,7 +49,7 @@ afterEvaluate {
                 from components.release
                 groupId = "com.github.Mostafa-khaled21"
                 artifactId = "uvccamerasdk"
-                version = "1.0.6"
+                version = "1.0.12"  // ✅ زوّد الـ version
             }
         }
     }
